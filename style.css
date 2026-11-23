@@ -397,22 +397,21 @@ nav ul li a:hover {
     color: var(--primary);
 }
 
-#shop-map {
+.map-placeholder {
     height: 100%;
     min-height: 300px;
-    width: 100%;
-    border: 2px solid #333;
-    z-index: 1;
-}
-
-#shop-map .leaflet-popup-content-wrapper,
-#shop-map .leaflet-popup-tip {
     background: var(--black);
-    color: var(--text-white);
+    border: 2px dashed #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-muted);
 }
 
-#shop-map .leaflet-popup-content strong {
-    color: var(--primary);
+.map-placeholder i {
+    font-size: 4rem;
+    margin-bottom: 20px;
 }
 
 /* Footer */
