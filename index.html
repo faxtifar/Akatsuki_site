@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Oswald:wght@300;500;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIINfQ3gTtO+e5Y8QWc6VtV4pHnX0hJfE0M=" crossorigin="" />
 </head>
 <body>
     <!-- Прелоадер в стиле Акацуки -->
@@ -148,11 +150,7 @@
                     </div>
                 </div>
                 <div class="contact-map" data-aos="fade-up" data-aos-delay="200">
-                    <!-- Заглушка карты -->
-                    <div class="map-placeholder">
-                        <i class="fas fa-map-marked-alt"></i>
-                        <span>Карта проезда (28 May)</span>
-                    </div>
+                    <div id="shop-map" aria-label="Карта филиалов Akatsuki Shop"></div>
                 </div>
             </div>
         </div>
@@ -167,12 +165,42 @@
     </footer>
 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
         // Инициализация анимаций
-        AOS.init({
-            duration: 1000,
-            once: true
-        });
+            AOS.init({
+                duration: 1000,
+                once: true
+            });
+
+            // Интерактивная карта с двумя филиалами Akatsuki Shop.
+            const shops = [
+                {
+                    name: 'Akatsuki Shop — Nizami',
+                    address: 'Nizami Mall, 2-й этаж, магазин №225',
+                    position: [40.3781788, 49.8311315]
+                },
+                {
+                    name: 'Akatsuki Shop — 28 May',
+                    address: '28 Mall, напротив торгового центра',
+                    position: [40.3792415, 49.8472598]
+                }
+            ];
+
+            const shopMap = L.map('shop-map', { scrollWheelZoom: false });
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>'
+            }).addTo(shopMap);
+
+            const bounds = L.latLngBounds();
+            shops.forEach(function (shop) {
+                const marker = L.marker(shop.position).addTo(shopMap);
+                marker.bindPopup('<strong>' + shop.name + '</strong><br>' + shop.address);
+                bounds.extend(shop.position);
+            });
+            shopMap.fitBounds(bounds, { padding: [30, 30] });
 
         // Скрытие прелоадера
         window.addEventListener('load', function() {
